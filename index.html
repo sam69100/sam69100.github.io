@@ -8,7 +8,7 @@
     background-color: #0d1117;
     color: #00ff9c;
     font-family: "Fira Code", monospace;
-    padding: 50px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,16 +20,19 @@
     padding: 20px 30px;
     box-shadow: 0 0 10px #00ff9c55;
     max-width: 900px;
+    width: 90%;
+    min-height: 250px;
     text-align: left;
     margin-bottom: 40px;
-  }
-
-  .terminal p {
-    margin: 5px 0;
+    white-space: pre-wrap;
   }
 
   .cursor {
+    display: inline-block;
+    width: 10px;
+    background-color: #00ff9c;
     animation: blink 1s infinite;
+    margin-left: 5px;
   }
 
   @keyframes blink {
@@ -71,37 +74,75 @@
   tr:hover {
     background-color: #003f2f;
   }
-
 </style>
 </head>
 <body>
 
-  <div class="terminal">
-    <p>> Welcome to Sam’s Cyber Lab — live attack surface & labs.</p>
-    <p>Initializing reconnaissance modules...</p>
-    <p>> pursuits: CTFs, reverse engineering, writeups</p>
-    <p>> focus: web, forensics, binary exploitation</p>
-    <p>Tip: follow the repo for updates and writeups.</p>
-    <p>$ whoami<br>sam69100</p>
-    <p>$ pwd<br>/home/sam/projects</p>
-    <p>> enjoy exploring — pull requests welcome.</p>
-    <p>guest@sam:~$ <span class="cursor">█</span></p>
-    <p><a href="https://github.com/sam69100" target="_blank">→ View GitHub profile</a></p>
-  </div>
+  <div class="terminal" id="terminal"></div>
 
   <table id="ctf-table">
     <thead>
       <tr><th>TryHackMe</th><th>Solution</th></tr>
     </thead>
-    <tbody>
-      <!-- Exemple de lignes -->
-      <tr><td>TH-01</td><td><a href="#">Voir</a></td></tr>
-      <tr><td>TH-02</td><td><a href="#">Voir</a></td></tr>
-      <tr><td>TH-03</td><td><a href="#">Voir</a></td></tr>
-      <tr><td>TH-04</td><td><a href="#">Voir</a></td></tr>
-      <!-- tu peux continuer jusqu'à TH-50 -->
+    <tbody id="table-body">
+      <!-- lignes ajoutées dynamiquement -->
     </tbody>
   </table>
+
+<script>
+  // === Effet d’écriture "terminal hacker" ===
+  const terminalText = [
+    "> Welcome to Sam’s Cyber Lab — live attack surface & labs.",
+    "Initializing reconnaissance modules...",
+    "> pursuits: CTFs, reverse engineering, writeups",
+    "> focus: web, forensics, binary exploitation",
+    "Tip: follow the repo for updates and writeups.",
+    "$ whoami",
+    "sam69100",
+    "$ pwd",
+    "/home/sam/projects",
+    "> enjoy exploring — pull requests welcome.",
+    "guest@sam:~$",
+    "→ View GitHub profile: https://github.com/sam69100"
+  ];
+
+  const terminalDiv = document.getElementById("terminal");
+  let line = 0;
+  let charIndex = 0;
+
+  function typeLine() {
+    if (line < terminalText.length) {
+      const currentLine = terminalText[line];
+      if (charIndex < currentLine.length) {
+        terminalDiv.innerHTML += currentLine.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeLine, 30);
+      } else {
+        terminalDiv.innerHTML += "\n";
+        line++;
+        charIndex = 0;
+        setTimeout(typeLine, 250);
+      }
+    } else {
+      terminalDiv.innerHTML += "<span class='cursor'></span>";
+    }
+  }
+
+  typeLine();
+
+  // === Génération auto du tableau TryHackMe ===
+  const tbody = document.getElementById("table-body");
+  for (let i = 1; i <= 50; i++) {
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
+    td1.textContent = `TH-${String(i).padStart(2, "0")}`;
+    td2.innerHTML = `<a href="#">Voir</a>`;
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tbody.appendChild(tr);
+  }
+</script>
 
 </body>
 </html>
