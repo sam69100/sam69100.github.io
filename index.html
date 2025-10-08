@@ -5,215 +5,125 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Sam’s Cyber Lab — Terminal</title>
 <style>
-  :root{
-    --bg:#000;
-    --panel:#071011;
-    --text:#33ff66;
-    --muted:#0b3d2b;
-    --accent:#00e6ff;
-    --table-bg:#06120d;
-    --table-border:rgba(255,255,255,0.04);
-    --row-alt:rgba(255,255,255,0.015);
-  }
-  html,body{height:100%;margin:0;background:var(--bg);font-family:ui-monospace, "SFMono-Regular", Menlo, Monaco, "Roboto Mono", "Courier New", monospace;color:var(--text);}
-  body::before{
-    content:"";position:fixed;inset:0;pointer-events:none;
-    background:linear-gradient(transparent 95%, rgba(255,255,255,0.015) 96%) repeat;
-    mix-blend-mode:overlay;opacity:0.25;transform:scaleY(1.05);
+  body {
+    background-color: #000;
+    color: #33ff66;
+    font-family: monospace;
+    margin: 0;
+    padding: 2rem;
   }
 
-  .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:2rem;}
-  .terminal{
-    width:min(1100px,94%); max-width:1100px;
-    background:
-      radial-gradient(1200px 400px at 10% 0%, rgba(0,255,136,0.02), transparent 10%),
-      linear-gradient(180deg, rgba(255,255,255,0.02), transparent 25%),
-      var(--panel);
-    border:1px solid var(--table-border);
-    box-shadow: 0 10px 50px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
-    border-radius:10px;padding:18px;position:relative;overflow:hidden;
+  .terminal {
+    background: #06120d;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px #001a0d;
   }
 
-  .term-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-  .dots{display:flex;gap:8px}
-  .dot{width:12px;height:12px;border-radius:50%;}
-  .dot.red{background:#ff605c;box-shadow:0 0 8px rgba(255,96,92,0.25);}
-  .dot.yellow{background:#ffbd2e;box-shadow:0 0 8px rgba(255,189,46,0.12);}
-  .dot.green{background:#17c964;box-shadow:0 0 8px rgba(23,201,100,0.12);}
-  .term-title{margin-left:auto;color:var(--muted);font-size:0.95rem}
+  pre { margin: 0; }
 
-  .screen{background:transparent;padding:12px;border-radius:6px;min-height:260px;max-height:480px;overflow:auto}
-  pre{margin:0;white-space:pre-wrap;word-break:break-word;line-height:1.45;font-size:1.02rem}
-  .line{color:var(--text);opacity:0.98}
+  a {
+    color: #00e6ff;
+    text-decoration: none;
+  }
 
-  .cursor{display:inline-block;width:10px;height:1.05em;background:var(--text);margin-left:4px;vertical-align:bottom;animation:blink 1s steps(1) infinite;}
-  @keyframes blink{50%{opacity:0.05}}
+  a:hover {
+    text-decoration: underline;
+  }
 
-  a.btn{display:inline-block;margin-top:12px;color:var(--accent);text-decoration:none;font-weight:600}
+  .cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1.1em;
+    background: #33ff66;
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+  }
 
-  .typed{font-weight:500;text-shadow:0 0 8px rgba(51,255,102,0.06)}
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
 
   /* TABLE STYLES */
-  .table-container{
-    margin-top:18px;
-    background:var(--table-bg);
-    border:1px solid var(--table-border);
-    padding:12px;
-    border-radius:8px;
-    color:var(--text);
-    overflow:auto;
+  .table-container {
+    margin-top: 25px;
+    border: 1px solid #003322;
+    border-radius: 6px;
+    overflow-x: auto;
   }
-  table.ctf {
-    width:100%;
-    border-collapse:collapse;
-    font-size:0.95rem;
-  }
-  table.ctf thead th{
-    text-align:left;
-    padding:8px 10px;
-    border-bottom:1px solid rgba(255,255,255,0.06);
-    color:var(--accent);
-    font-weight:700;
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  }
-  table.ctf tbody td{
-    padding:8px 10px;
-    border-bottom:1px dashed rgba(255,255,255,0.03);
-    vertical-align:middle;
-    color:var(--text);
-  }
-  table.ctf tbody tr:nth-child(even){ background:var(--row-alt); }
-  table.ctf a { color:#7befff; text-decoration:none; font-weight:600; }
-  table.ctf a:hover { color:#b7ffea; text-decoration:underline; }
 
-  @media (max-width:640px){
-    .terminal{padding:12px}
-    .screen{min-height:200px}
-    pre{font-size:0.95rem}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #33ff66;
+  }
+
+  th, td {
+    border: 1px solid #003322;
+    padding: 6px 10px;
+  }
+
+  th {
+    background: #002d1f;
+    color: #00e6ff;
+  }
+
+  tr:nth-child(even) {
+    background: #001b12;
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="terminal" role="region" aria-label="Terminal">
-      <div class="term-head">
-        <div class="dots">
-          <div class="dot red"></div>
-          <div class="dot yellow"></div>
-          <div class="dot green"></div>
-        </div>
-        <div class="term-title">sam69100.github.io — Sam’s Cyber Lab</div>
-      </div>
 
-      <div class="screen" id="screen" aria-live="polite">
-        <pre id="content"><span style="color:var(--muted)">&gt; booting ...</span></pre>
-      </div>
+<div class="terminal">
+<pre id="content">
+<span style="color:#00994d">&gt;</span> Welcome to Sam’s Cyber Lab — live attack surface & labs.
+Initializing reconnaissance modules...
+&gt; pursuits: CTFs, reverse engineering, writeups
+&gt; focus: web, forensics, binary exploitation
+Tip: follow the repo for updates and writeups.
+$ whoami
+sam69100
+$ pwd
+/home/sam/projects
+&gt; enjoy exploring — pull requests welcome.
+guest@sam:~$ <span class="cursor"></span>
+</pre>
 
-      <a class="btn" href="https://github.com/sam69100" target="_blank" rel="noopener">→ View GitHub profile</a>
+<br>
+→ <a href="https://github.com/sam69100" target="_blank">View GitHub profile</a>
 
-      <!-- Table container placed below the terminal content -->
-      <div class="table-container" id="table-container" aria-label="TryHackMe table">
-        <table class="ctf" id="ctf-table" aria-describedby="table-desc">
-          <caption id="table-desc" style="caption-side:top;text-align:left;padding-bottom:6px;color:var(--muted);font-weight:600">TryHackMe — Solutions index</caption>
-          <thead>
-            <tr><th>tryhackme</th><th>solution</th></tr>
-          </thead>
-          <tbody>
-            <!-- rows generated by JavaScript -->
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-  </div>
+<!-- TABLE -->
+<div class="table-container">
+  <table id="ctf-table">
+    <thead>
+      <tr><th>tryhackme</th><th>solution</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+</div>
 
 <script>
-/* typing lines as before */
-const lines = [
-  {text:"Welcome to Sam’s Cyber Lab — live attack surface & labs.", pause:700},
-  {text:"Initializing reconnaissance modules...", pause:700},
-  {text:"> pursuits: CTFs, reverse engineering, writeups", pause:600},
-  {text:"> focus: web, forensics, binary exploitation", pause:600},
-  {text:"", pause:300},
-  {text:"Tip: follow the repo for updates and writeups.", pause:800},
-  {text:"", pause:200},
-  {text:"$ whoami", pause:600},
-  {text:"sam69100", pause:900},
-  {text:"$ pwd", pause:400},
-  {text:"/home/sam/projects", pause:700},
-  {text:"", pause:200},
-  {text:"> enjoy exploring — pull requests welcome.", pause:1000}
-];
+const tbody = document.querySelector('#ctf-table tbody');
 
-const content = document.getElementById('content');
+// Crée 50 lignes dans le tableau
+for (let i = 1; i <= 50; i++) {
+  const tr = document.createElement('tr');
+  const td1 = document.createElement('td');
+  const td2 = document.createElement('td');
 
-function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+  td1.textContent = `TH-${String(i).padStart(2,'0')}`;
+  const link = document.createElement('a');
+  link.href = '#';
+  link.textContent = 'Voir';
+  td2.appendChild(link);
 
-async function typeLine(l){
-  const node = document.createElement('div');
-  node.className = 'line';
-  content.appendChild(node);
-  const typed = document.createElement('span');
-  typed.className = 'typed';
-  node.appendChild(typed);
-  const cursor = document.createElement('span');
-  cursor.className = 'cursor';
-  node.appendChild(cursor);
-
-  const text = l.text;
-  for(let i=0;i<text.length;i++){
-    typed.textContent += text[i];
-    await sleep(18 + Math.random()*25);
-  }
-  await sleep(80);
-  cursor.style.display = 'none';
-  window.scrollTo(0,document.body.scrollHeight);
+  tr.appendChild(td1);
+  tr.appendChild(td2);
+  tbody.appendChild(tr);
 }
-
-async function runTyping(){
-  content.textContent = '';
-  for(const l of lines){
-    await typeLine(l);
-    await sleep(l.pause || 400);
-  }
-  const final = document.createElement('div');
-  final.className = 'line';
-  final.innerHTML = '<span class="typed">guest@sam:~$ </span><span class="cursor"></span>';
-  content.appendChild(final);
-}
-
-// Build table with 50 rows (JS)
-function buildTable(rowsCount){
-  const tbody = document.querySelector('#ctf-table tbody');
-  tbody.innerHTML = '';
-  for(let i=1;i<=rowsCount;i++){
-    const tr = document.createElement('tr');
-    const td1 = document.createElement('td');
-    const td2 = document.createElement('td');
-
-    // tryhackme column: default label TH-<i>
-    td1.textContent = `TH-${String(i).padStart(2,'0')}`;
-
-    // solution column: placeholder link
-    const a = document.createElement('a');
-    a.href = '#'; // remplace par le lien réel si tu veux
-    a.textContent = 'Voir';
-    a.setAttribute('data-id', i);
-    td2.appendChild(a);
-
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tbody.appendChild(tr);
-  }
-}
-
-// After typing finishes, build the table and scroll to it
-(async function main(){
-  await runTyping();
-  buildTable(50);
-  // scroll so the table is in view
-  document.getElementById('table-container').scrollIntoView({behavior:'smooth', block:'center'});
-})();
 </script>
+
 </body>
 </html>
